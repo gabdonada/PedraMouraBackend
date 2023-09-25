@@ -1,0 +1,74 @@
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import axios from 'axios';
+import { plainToClass } from 'class-transformer';
+import { PrismaService } from "src/dataBase/prisma.service";
+import { GithubUserResponse } from "src/dtos/githubResponse-body";
+import { AbstractUserRepository } from "src/repositories/interfaces/abstract-user-repository";
+
+@Injectable()
+export class UserRepository implements AbstractUserRepository{
+    constructor(
+      private prisma: PrismaService,
+      private jwt: JwtService,
+      private configService: ConfigService){}
+
+    async authenticate(code: string): Promise<string> {
+      const accessTokenResponse = await axios.post(
+        'https://github.com/login/oauth/access_token',
+        null, //request body
+        {//URL params
+            params: {
+                client_id: this.configService.get<string>('GITHUB_CLIENT_ID'),
+                client_secret: this.configService.get<string>('GITHUB_CLIENT_SECRET'),
+                code
+            },
+            //retun method desired
+            headers:{
+                Accept: 'application/json'
+            }
+        }
+      )
+  
+      const { access_token } = accessTokenResponse.data;
+      
+      const userResponse = await axios.get('https://api.github.com/user', {
+        headers:{
+          Authorization: `Bearer ${access_token}`
+        }
+      });
+  
+      const userInfo = plainToClass(GithubUserResponse,userResponse.data)
+
+      const user = await this.prisma.user.findUnique({
+        where:{
+          platformId: userInfo.id,
+        }
+      })
+
+      if(!user){
+        await this.prisma.user.create({
+            data:{
+              platformId: userInfo.id,
+              name: userInfo.name,
+              avatarUrl: userInfo.avatarUrl,
+              login: userInfo.login,
+            }
+          })
+      }
+
+      const payload = {
+        //user info that I want inside of the token (just public ones - it is not crypted)
+        name: user.name,
+        avatarUrl: user.avatarUrl
+      }
+
+      const token = this.jwt.sign(payload,{
+          expiresIn: '30 days', 
+          subject: user.id //secret is who owns this token.
+      })
+
+      return token
+    }
+}

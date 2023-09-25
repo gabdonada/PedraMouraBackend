@@ -1,12 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { AbstractUserRepository } from './repositories/interfaces/abstract-user-repository';
+import { AuthenticationUserBody } from './dtos/authentication-body';
 
-@Controller()
+@Controller('api')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private createNewUserRepository: AbstractUserRepository
+  ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post('userauthentication')
+  async postUserAuthentication(@Body() body: AuthenticationUserBody){
+    const { code } = body;
+
+    await this.createNewUserRepository.authenticate(code);
   }
+
 }
