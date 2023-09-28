@@ -18,3 +18,30 @@ model user{
   avatarUrl String
   isAdmin Boolean @default(false)
 }
+
+model vehicles{
+  id String @id @default(uuid())
+  currentKM Int
+  model String
+  year Int
+  vehType String
+  space String
+  isArchived Boolean @default(false)
+}
+
+model maintenance{
+  id String @id @default(uuid())
+  date String //will use moment.js
+  mainType String
+  vehKm Int
+  totalAmout Float
+
+  parts part[] //can have many parts
+}
+
+model part{
+  id String @id @default(uuid())
+  name String
+
+  maintenance maintenance[] //can have n maintenance related once it is not stock
+}

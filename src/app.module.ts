@@ -10,7 +10,7 @@ import { AbstractUserRepository } from './repositories/interfaces/abstract-user-
 @Module({
   imports: [
     JwtModule.register({
-      secret: 'spacetime', //it is a secret used to communicate between the services - hardcoded are not recommended
+      secret: 'pedramoura', //it is a secret used to communicate between the services - hardcoded are not recommended
     }),
   ],
   controllers: [AppController],
