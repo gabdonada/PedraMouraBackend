@@ -4,4 +4,5 @@ export class MaintenanceType {
     mainType: string;
     vehKm: number;
     totalAmout: number;
+    vehicleId: string;
 }
