@@ -21,12 +21,15 @@ model user{
 
 model vehicles{
   id String @id @default(uuid())
+  plate String @unique
   currentKM Int
   model String
   year Int
   vehType String
   space String
   isArchived Boolean @default(false)
+
+  maintenances maintenance[] //can have many maintenances
 }
 
 model maintenance{
@@ -35,8 +38,10 @@ model maintenance{
   mainType String
   vehKm Int
   totalAmout Float
+  vehicleId String
 
   parts part[] //can have many parts
+  vehicle vehicles @relation(fields: [vehicleId], references: [id]) //it can have only one vehicle
 }
 
 model part{

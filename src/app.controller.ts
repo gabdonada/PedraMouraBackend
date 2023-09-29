@@ -31,7 +31,8 @@ export class AppController {
       body.vehType,
       body.space,
       body.currentKM,
-      body.year
+      body.year,
+      body.plate
     );
   }
 
