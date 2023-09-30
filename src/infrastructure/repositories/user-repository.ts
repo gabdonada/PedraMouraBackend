@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { plainToClass } from 'class-transformer';
-import { PrismaService } from "src/dataBase/prisma.service";
-import { GithubUserResponse } from "src/dtos/githubResponse-body";
-import { AbstractUserRepository } from "src/repositories/interfaces/abstract-user-repository";
+import { GithubUserResponse } from "src/domain/entities/github-response.entity";
+import { IUserRepository } from "src/domain/repositories/user-repository-abstract";
+import { PrismaService } from "src/infrastructure/config/prisma.service";
 
 @Injectable()
-export class UserRepository implements AbstractUserRepository{
+export class UserRepository implements IUserRepository {
     constructor(
       private prisma: PrismaService,
       private jwt: JwtService,
@@ -29,10 +29,12 @@ export class UserRepository implements AbstractUserRepository{
                 Accept: 'application/json'
             }
         }
-      )
+      );
   
       const { access_token } = accessTokenResponse.data;
       
+      console.log(access_token);
+
       const userResponse = await axios.get('https://api.github.com/user', {
         headers:{
           Authorization: `Bearer ${access_token}`
