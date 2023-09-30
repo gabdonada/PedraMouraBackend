@@ -1,9 +1,7 @@
 
-import { CreateVehicleDto } from "src/domain/dtos/vehicle-type.dto";
-import { VehicleType } from "../../domain/entities/vehicle-type.entity";
-import { VehicleInMemoryRepository } from "../../infrastructure/repositories/vehicle-repository-in-memory";
-import { VehicleUseCases } from "./vehicle.use-case";
-import exp from "constants";
+import { CreateVehicleDto } from "../../../src/domain/dtos/vehicle-type.dto";
+import { VehicleInMemoryRepository } from "../../../src/infrastructure/repositories/vehicle-repository-in-memory";
+import { VehicleUseCases } from "../../../src/uses-cases/vehicle/vehicle.use-case";
 
 describe('VehicleUseCases', () => {
   
@@ -42,7 +40,8 @@ describe('VehicleUseCases', () => {
       const entity = await service.create(dto);
       expect(entity).not.toBeNull();
       expect(entity.plate).toBe(dto.plate);
-  });
+    });
+    
   });
 
 });

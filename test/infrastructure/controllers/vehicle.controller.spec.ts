@@ -1,8 +1,8 @@
 
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { CreateVehicleDto } from "../../domain/dtos/vehicle-type.dto";
-import { stringified } from "../utils/json-functions";
+import { CreateVehicleDto } from "../../../src/domain/dtos/vehicle-type.dto";
+import { stringified } from "../../../src/infrastructure/utils/json-functions";
 
 describe('VehicleController', () => {
 
