@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
-import { VehicleType } from 'src/domain/entities/vehicle-type.entity';
-import { VehicleUseCases } from 'src/uses-cases/vehicle/vehicle.use-case';
+import { VehicleType } from '../../domain/entities/vehicle-type.entity';
+import { VehicleUseCases } from '../../uses-cases/vehicle/vehicle.use-case';
 
 
 @Controller('vehicles')

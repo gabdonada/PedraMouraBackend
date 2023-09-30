@@ -1,11 +1,14 @@
-import { Body, Injectable } from "@nestjs/common";
-import { VehicleType } from "src/domain/entities/vehicle-type.entity";
-import { IVehicleRepository } from "src/domain/repositories/vehicle-repository-abstract";
+import { Body, Inject, Injectable } from "@nestjs/common";
+import { VehicleType } from "../../domain/entities/vehicle-type.entity";
+import { IVehicleRepository } from "../../domain/repositories/vehicle-repository-interface";
+import { CreateVehicleDto } from "src/domain/dtos/vehicle-type.dto";
+import { classToPlain, plainToClass } from "class-transformer";
 
 @Injectable()
 export class VehicleUseCases {
 
   constructor(
+    @Inject('VehiclePersistenceRepository')
     private repository: IVehicleRepository
   ) {}
 
@@ -13,20 +16,30 @@ export class VehicleUseCases {
     return await this.repository.getAll();
   }
 
-  async create(@Body() body: VehicleType) : Promise<VehicleType>{
-    const obj = await this.repository.create(
-      body.model,
-      body.vehType,
-      body.space,
-      body.currentKM,
-      body.year
-    );
-    return obj;
+  async create(dto: CreateVehicleDto) : Promise<VehicleType>{
+    let entity = this.convertDtoToEntity(dto);
+    const databaseEntity = await this.getByPlate(entity);
+    if (databaseEntity && databaseEntity.id) {
+      throw new Error("O veiculo já existe no banco de dados.");
+    }
+    entity = await this.repository.create(entity);
+    return entity;
+  }
+
+  convertDtoToEntity(dto: CreateVehicleDto) : VehicleType {
+    const data = classToPlain(dto);
+    const entity = plainToClass(VehicleType, data);
+    return entity;
   }
 
 
   async deleteById(@Body() body: VehicleType) : Promise<VehicleType>{
     const obj = await this.repository.deleteById(body.id);
+    return obj;
+  }
+
+  async getByPlate(@Body() body: VehicleType) : Promise<VehicleType>{
+    const obj = await this.repository.getByPlate(body.plate);
     return obj;
   }
 

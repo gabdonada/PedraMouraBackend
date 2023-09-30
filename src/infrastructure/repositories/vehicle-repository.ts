@@ -1,15 +1,24 @@
 import { Injectable } from "@nestjs/common";
 import { plainToClass } from "class-transformer";
-import { PrismaService } from "src/infrastructure/config/prisma.service";
 import { VehicleType } from "src/domain/entities/vehicle-type.entity";
-import { IVehicleRepository } from "src/domain/repositories/vehicle-repository-abstract";
+import { IVehicleRepository } from "src/domain/repositories/vehicle-repository-interface";
+import { PrismaService } from "src/infrastructure/config/prisma.service";
 
 @Injectable()
-export class VehicleRepository implements IVehicleRepository {
+export class VehiclePersistenceRepository implements IVehicleRepository {
     
     constructor(
         private prisma: PrismaService
     ){}
+
+    async create(obj: VehicleType): Promise<VehicleType> {
+        const vehicle = await this.prisma.vehicles.create({ data : obj });
+        return vehicle;
+    }
+
+    update(model: VehicleType): Promise<VehicleType> {
+        throw new Error("Method not implemented.");
+    }
 
     async getAll(): Promise<VehicleType[]> {
         const vehicleDB = await this.prisma.vehicles.findMany();
@@ -17,19 +26,6 @@ export class VehicleRepository implements IVehicleRepository {
         const userInfo = plainToClass(VehicleType, vehicleDB)
         
         return userInfo;
-    }
-
-    async create(model: string, vehType: string, space: string, currentKM: number, year: number): Promise<VehicleType>  {
-        const vehicle = await this.prisma.vehicles.create({
-            data:{
-                model: model,
-                vehType: vehType,
-                space: space,
-                currentKM: currentKM,
-                year: year
-            }
-        })
-        return vehicle;
     }
 
     async deleteById(vehicleId: string): Promise<VehicleType> {
@@ -43,4 +39,5 @@ export class VehicleRepository implements IVehicleRepository {
         });
         return vehicle; 
     }
+    
 }

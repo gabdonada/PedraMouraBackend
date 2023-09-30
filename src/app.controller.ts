@@ -4,7 +4,7 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   
   @Get()
-  async getVehicles(){
+  async get(){
     return "Bem vindo a API da Pedra Moura !";
   }
 

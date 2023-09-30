@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user{
+model user {
   id String @id @default(uuid())
   platformId String @unique
   name String 
@@ -27,6 +27,7 @@ model vehicles{
   vehType String
   space String
   isArchived Boolean @default(false)
+  plate String
 }
 
 model maintenance{

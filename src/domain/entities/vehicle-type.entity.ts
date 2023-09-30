@@ -6,4 +6,5 @@ export class VehicleType {
     currentKM: number;
     year: number;
     isArchived: boolean;
+    plate: string;
 }
