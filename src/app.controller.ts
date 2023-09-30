@@ -5,6 +5,7 @@ import { AbstractVehicle } from './repositories/interfaces/abstract-vehicle-repo
 import { VehicleType } from './dtos/vehicle-type';
 import { AbstractMaintenance } from './repositories/interfaces/abstract-maintenance';
 import { MaintenanceType } from './dtos/maintenance-type';
+import { ScheduledMaintenanceType } from './dtos/scheduledMaintenance-type';
 
 @Controller('api')
 export class AppController {
@@ -54,8 +55,8 @@ export class AppController {
     await this.maintenance.getMaintenanceAllVehicle();
   }
 
-  @Get('registerMaintenance')
-  async registerMaintenance(@Body() body: MaintenanceType){
+  @Post('registerMaintenance')
+  async postRegisterMaintenance(@Body() body: MaintenanceType){
     await this.maintenance.registerMaintenance(
       body.date,
       body.mainType,
@@ -89,4 +90,20 @@ export class AppController {
   async getNeedMaintenance(){
     await this.vehicle.getNeedMaintenance();
   }
+
+  @Get('getAllScheduledMaintenances')
+  async getAllScheduledMaintenances(@Body() body: string){
+    await this.maintenance.getAllScheduledMaintenance(body);
+  }
+
+  @Get('getScheduledMaintenancesByCar')
+  async getScheduledMaintenances(@Body() body: ScheduledMaintenanceType){
+    await this.maintenance.getScheduledMaintenance(body.vehicleId,body.date);
+  }
+
+  @Post('scheduleMaintenance')
+  async postScheduleMaintenance (@Body() body: ScheduledMaintenanceType){
+    await this.maintenance.scheduleMaintenance(body.date, body.mainType, body.vehicleId);
+  }
+
 }
