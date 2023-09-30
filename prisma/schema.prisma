@@ -30,6 +30,7 @@ model vehicles{
   isArchived Boolean @default(false)
 
   maintenances maintenance[] //can have many maintenances
+  scheduledMaintenances scheduledMaintenance[] //can have many maintenances
 }
 
 model maintenance{
@@ -44,6 +45,14 @@ model maintenance{
   vehicle vehicles @relation(fields: [vehicleId], references: [id]) //it can have only one vehicle
 }
 
+model scheduledMaintenance{
+  id String @id @default(uuid())
+  date String //use momentjs
+  mainType String
+  vehicleId String
+
+  vehicle vehicles @relation(fields: [vehicleId], references: [id]) //it can have only one vehicle
+}
 model part{
   id String @id @default(uuid())
   name String
