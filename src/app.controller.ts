@@ -1,48 +1,19 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
-import { AbstractUserRepository } from './repositories/interfaces/abstract-user-repository';
-import { AuthenticationUserBody } from './dtos/authentication-body';
-import { AbstractVehicle } from './repositories/interfaces/abstract-vehicle-repository';
-import { VehicleType } from './dtos/vehicle-type';
-import { AbstractMaintenance } from './repositories/interfaces/abstract-maintenance';
-import { MaintenanceType } from './dtos/maintenance-type';
-import { ScheduledMaintenanceType } from './dtos/scheduledMaintenance-type';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { MaintenanceType } from './domain/entities/maintenance-type';
+import { ScheduledMaintenanceType } from './domain/entities/scheduledMaintenance-type';
+import { VehicleType } from './domain/entities/vehicle-type.entity';
+import { AbstractMaintenance } from './domain/repositories/abstract-maintenance';
 
-@Controller('api')
+
+@Controller()
 export class AppController {
   constructor(
-    private createNewUserRepository: AbstractUserRepository,
-    private vehicle: AbstractVehicle,
     private maintenance: AbstractMaintenance
     ) {}
-    
 
-  @Post('userauthentication')
-  async postUserAuthentication(@Body() body: AuthenticationUserBody){
-    const { code } = body;
-
-    await this.createNewUserRepository.authenticate(code);
-  }
-
-  @Get('getvehicles')
-  async getVehicles(){
-    await this.vehicle.getVehicles();
-  }
-
-  @Post('registerVehicle')
-  async postVehicle(@Body() body: VehicleType){
-    await this.vehicle.registerVehicle(
-      body.model,
-      body.vehType,
-      body.space,
-      body.currentKM,
-      body.year,
-      body.plate
-    );
-  }
-
-  @Put('archiveVehicle')
-  async putArchiveVehicle(@Body() body: VehicleType){
-    await this.vehicle.archiveVehicle(body.id);
+  @Get()
+  async get(){
+    return "Bem vindo a API da Pedra Moura !";
   }
 
   @Get('maintenanceByVehicle')
@@ -61,7 +32,7 @@ export class AppController {
       body.date,
       body.mainType,
       body.vehKm,
-      body.totalAmout, 
+      body.totalAmout,
       body.vehicleId
     );
   }
@@ -74,21 +45,6 @@ export class AppController {
   @Get('getMaintenceByPeriod')
   async getMaintenceByPeriod(@Body() body: string){
     await this.maintenance.getMaintenceByPeriod(body);
-  }
-
-  @Put('updateVehicleKm')
-  async updateVehicleKm(@Body() body:{vehicleId: string, newKm: number}){
-    await this.vehicle.updateVehicleKm(body.vehicleId, body.newKm)
-  }
-
-  @Get('getPreventiveMaintenance')
-  async getPreventiveMaintenance(){
-    await this.vehicle.getPreventiveMaintenance();
-  }
-
-  @Get('getNeedMaintenance')
-  async getNeedMaintenance(){
-    await this.vehicle.getNeedMaintenance();
   }
 
   @Get('getAllScheduledMaintenances')

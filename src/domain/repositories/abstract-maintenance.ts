@@ -1,6 +1,6 @@
-import { MaintenanceTotals } from "src/dtos/maintenance-totals";
-import { MaintenanceType } from "src/dtos/maintenance-type";
-import { ScheduledMaintenanceType } from "src/dtos/scheduledMaintenance-type";
+import { MaintenanceTotals } from "src/domain/entities/maintenance-totals";
+import { MaintenanceType } from "src/domain/entities/maintenance-type";
+import { ScheduledMaintenanceType } from "src/domain/entities/scheduledMaintenance-type";
 
 export abstract class AbstractMaintenance {
     //Get
