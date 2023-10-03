@@ -9,6 +9,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe()); //makes body validation
   app.enableCors(); //enables URLs access - by using it, we allow access to all routes
 
-  await app.listen(3000);
+  await app.listen(3333);
 }
 bootstrap();

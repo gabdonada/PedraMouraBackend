@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { plainToClass } from 'class-transformer';
 import { GithubUserResponse } from "src/domain/entities/github-response.entity";
+import { User } from "src/domain/entities/user.entity";
 import { IUserRepository } from "src/domain/repositories/user-repository-abstract";
 import { PrismaService } from "src/infrastructure/config/prisma.service";
 
@@ -33,8 +34,6 @@ export class UserRepository implements IUserRepository {
   
       const { access_token } = accessTokenResponse.data;
       
-      console.log(access_token);
-
       const userResponse = await axios.get('https://api.github.com/user', {
         headers:{
           Authorization: `Bearer ${access_token}`
@@ -46,6 +45,7 @@ export class UserRepository implements IUserRepository {
       const user = await this.prisma.user.findUnique({
         where:{
           platformId: userInfo.id,
+          platformType: 'GIT',
         }
       })
 
@@ -53,6 +53,7 @@ export class UserRepository implements IUserRepository {
         await this.prisma.user.create({
             data:{
               platformId: userInfo.id,
+              platformType: 'GIT',
               name: userInfo.name,
               avatarUrl: userInfo.avatarUrl,
               login: userInfo.login,
@@ -73,4 +74,28 @@ export class UserRepository implements IUserRepository {
 
       return token
     }
+
+    async create(userInfo: User): Promise<User> {
+      const user = await this.prisma.user.create({
+          data:{
+            platformId: userInfo.platformId,
+            platformType: userInfo.platformType,
+            name: userInfo.name,
+            avatarUrl: userInfo.avatarUrl,
+            login: userInfo.login,
+          }
+      });
+      return user;
+    }
+
+    async findUnique(userInfo: User): Promise<User> {
+      const user = await this.prisma.user.findUnique({
+        where:{
+          platformId: userInfo.platformId,
+          platformType: userInfo.platformType
+        }
+      })
+      return user;
+    }
+
 }

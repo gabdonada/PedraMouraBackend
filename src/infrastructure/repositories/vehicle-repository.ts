@@ -10,6 +10,10 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
     constructor(
         private prisma: PrismaService
     ){}
+    
+    getByPlate(plate: string): Promise<VehicleType> {
+        throw new Error("Method not implemented.");
+    }
 
     async create(obj: VehicleType): Promise<VehicleType> {
         const vehicle = await this.prisma.vehicles.create({ data : obj });

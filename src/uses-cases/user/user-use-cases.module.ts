@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { IUserRepository } from 'src/domain/repositories/user-repository-abstract';
-import { UserRepository } from 'src/infrastructure/repositories/user-repository';
-import { UserUseCases } from './user.use-case';
-import { PrismaService } from 'src/infrastructure/config/prisma.service';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Axios } from 'axios';
+import { JwtService } from '@nestjs/jwt';
+import { IUserRepository } from 'src/domain/repositories/user-repository-abstract';
+import { PrismaService } from 'src/infrastructure/config/prisma.service';
+import { UserRepository } from 'src/infrastructure/repositories/user-repository';
+import { UserFactoryService } from './user-factory.service';
+import { UserUseCases } from './user.use-case';
 
 @Module({
   imports: [],
@@ -15,10 +15,11 @@ import { Axios } from 'axios';
         useClass: UserRepository
     },
     UserUseCases,
+    UserFactoryService,
     PrismaService,
     JwtService,
     ConfigService
   ],
-  exports: [UserUseCases],
+  exports: [UserUseCases, UserFactoryService],
 })
 export class UserUseCasesModule {}
