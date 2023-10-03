@@ -1,17 +1,30 @@
 import { Injectable } from "@nestjs/common";
 import { plainToClass } from "class-transformer";
-import { PrismaService } from "src/dataBase/prisma.service";
-import { MaintenanceType } from "src/dtos/maintenance-type";
-import { VehicleType } from "src/dtos/vehicle-type";
-import { AbstractVehicle } from "../interfaces/abstract-vehicle-repository";
+import { MaintenanceType } from "src/domain/entities/maintenance-type";
+import { VehicleType } from "src/domain/entities/vehicle-type.entity";
+import { IVehicleRepository } from "src/domain/repositories/vehicle-repository-interface";
+import { PrismaService } from "src/infrastructure/config/prisma.service";
 
 @Injectable()
-export class VehicleRepository implements AbstractVehicle{
+export class VehiclePersistenceRepository implements IVehicleRepository {
     constructor(
         private prisma: PrismaService
     ){}
 
-    async getVehicles(): Promise<VehicleType[]> {
+    async getByPlate(plate: string): Promise<VehicleType> {
+        const vehicle = await this.prisma.vehicles.findUnique({
+            where:{
+                plate: plate
+            }
+        });
+        return vehicle;
+    }
+    
+    update(model: VehicleType): Promise<VehicleType> {
+        throw new Error("Method not implemented.");
+    }
+
+    async getAll(): Promise<VehicleType[]> {
         const vehicleDB = await this.prisma.vehicles.findMany();
 
         const vehicle = plainToClass(VehicleType,vehicleDB);
@@ -19,28 +32,21 @@ export class VehicleRepository implements AbstractVehicle{
         return vehicle
     }
 
-    async registerVehicle(model: string, vehType: string, space: string, currentKM: number, year: number, plate: string): Promise<void>  {
-        await this.prisma.vehicles.create({
-            data:{
-                model: model,
-                vehType: vehType,
-                space: space,
-                currentKM: currentKM,
-                year: year,
-                plate: plate
-            }
-        })
+    async create(obj: VehicleType): Promise<VehicleType> {
+        const vehicle = await this.prisma.vehicles.create({ data : obj });
+        return vehicle;
     }
 
-    async archiveVehicle(vehicleId: string): Promise<void> {
-        await this.prisma.vehicles.update({
+    async deleteById(vehicleId: string): Promise<VehicleType> {
+        const vehicle = await this.prisma.vehicles.update({
             data:{
                 isArchived: true
             },
             where:{
                 id: vehicleId
             }
-        })
+        });
+        return vehicle; 
     }
 
     async updateVehicleKm(vehicleId: string, newKm: number): Promise<void> {
@@ -113,4 +119,5 @@ export class VehicleRepository implements AbstractVehicle{
 
         return maintenanceTime;
     }
+    
 }

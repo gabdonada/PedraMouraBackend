@@ -1,10 +1,9 @@
 import { plainToClass } from "class-transformer";
-import { PrismaService } from "src/dataBase/prisma.service";
-import { MaintenanceTotals } from "src/dtos/maintenance-totals";
-import { MaintenanceType } from "src/dtos/maintenance-type";
-import { ScheduledMaintenanceType } from "src/dtos/scheduledMaintenance-type";
-import { AbstractMaintenance } from "../interfaces/abstract-maintenance";
-
+import { MaintenanceType } from "src/domain/entities/maintenance-type";
+import { PrismaService } from "../config/prisma.service";
+import { AbstractMaintenance } from "src/domain/repositories/abstract-maintenance";
+import { MaintenanceTotals } from "src/domain/entities/maintenance-totals";
+import { ScheduledMaintenanceType } from "src/domain/entities/scheduledMaintenance-type";
 
 export class Maintenance implements AbstractMaintenance {
     constructor(
