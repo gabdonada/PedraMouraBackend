@@ -1,8 +1,8 @@
-import { Body, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Body, Inject, Injectable } from "@nestjs/common";
+import { classToPlain, plainToClass } from "class-transformer";
+import { CreateVehicleDto } from "src/domain/dtos/vehicle-type.dto";
 import { VehicleType } from "../../domain/entities/vehicle-type.entity";
 import { IVehicleRepository } from "../../domain/repositories/vehicle-repository-interface";
-import { CreateVehicleDto } from "src/domain/dtos/vehicle-type.dto";
-import { classToPlain, plainToClass } from "class-transformer";
 
 @Injectable()
 export class VehicleUseCases {
@@ -20,7 +20,7 @@ export class VehicleUseCases {
     let entity = this.convertDtoToEntity(dto);
     const databaseEntity = await this.getByPlate(entity);
     if (databaseEntity && databaseEntity.id) {
-      throw new Error("O veiculo já existe no banco de dados.");
+      throw new BadRequestException("O veiculo já existe no banco de dados.");
     }
     entity = await this.repository.create(entity);
     return entity;

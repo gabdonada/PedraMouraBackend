@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { VehicleType } from '../../domain/entities/vehicle-type.entity';
 import { VehicleUseCases } from '../../uses-cases/vehicle/vehicle.use-case';
-
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Controller('vehicles')
 export class VehiclesController {
@@ -27,17 +27,17 @@ export class VehiclesController {
 
   @Put('update-vehicle-km')
   async updateVehicleKm(@Body() body:{vehicleId: string, newKm: number}){
-    await this.usesCases.updateVehicleKm(body);
+    return await this.usesCases.updateVehicleKm(body);
   }
 
   @Get('get-preventive-maintenance')
   async getPreventiveMaintenance(){
-    await this.usesCases.getPreventiveMaintenance();
+    return await this.usesCases.getPreventiveMaintenance();
   }
 
   @Get('get-need-maintenance')
   async getNeedMaintenance(){
-    await this.usesCases.getNeedMaintenance();
+    return await this.usesCases.getNeedMaintenance();
   }
 
 }

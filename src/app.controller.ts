@@ -16,17 +16,17 @@ export class AppController {
     return "Bem vindo a API da Pedra Moura !";
   }
 
-  @Get('maintenanceByVehicle')
+  @Get('maintenance/maintenance-by-vehicle')
   async getMaintenanceByVehicle(@Body() body: VehicleType){
     await this.maintenance.getMaintenanceByVehicle(body.id);
   }
 
-  @Get('getMaintenanceAllVehicle')
+  @Get('maintenance/get-maintenance-all-vehicle')
   async getMaintenanceAllVehicle(){
     await this.maintenance.getMaintenanceAllVehicle();
   }
 
-  @Post('registerMaintenance')
+  @Post('maintenance/register-maintenance')
   async postRegisterMaintenance(@Body() body: MaintenanceType){
     await this.maintenance.registerMaintenance(
       body.date,
@@ -37,27 +37,27 @@ export class AppController {
     );
   }
 
-  @Get('getMaintenceTotals')
+  @Get('maintenance/get-maintence-totals')
   async getMaintenceTotals(){
     await this.maintenance.getMaintenceTotals();
   }
 
-  @Get('getMaintenceByPeriod')
+  @Get('maintenance/get-maintence-by-period')
   async getMaintenceByPeriod(@Body() body: string){
     await this.maintenance.getMaintenceByPeriod(body);
   }
 
-  @Get('getAllScheduledMaintenances')
+  @Get('maintenance/get-all-scheduled-maintenances')
   async getAllScheduledMaintenances(@Body() body: string){
     await this.maintenance.getAllScheduledMaintenance(body);
   }
 
-  @Get('getScheduledMaintenancesByCar')
+  @Get('maintenance/get-scheduled-maintenances-by-car')
   async getScheduledMaintenances(@Body() body: ScheduledMaintenanceType){
     await this.maintenance.getScheduledMaintenance(body.vehicleId,body.date);
   }
 
-  @Post('scheduleMaintenance')
+  @Post('maintenance/schedule-maintenance')
   async postScheduleMaintenance (@Body() body: ScheduledMaintenanceType){
     await this.maintenance.scheduleMaintenance(body.date, body.mainType, body.vehicleId);
   }
