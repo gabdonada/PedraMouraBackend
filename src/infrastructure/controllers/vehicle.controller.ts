@@ -42,7 +42,7 @@ export class VehiclesController {
   }
 
   @Put('update-vehicle')
-  async updateVehicle(@Body() body:{vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: string}){
+  async updateVehicle(@Body() body:{vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: number}){
     await this.usesCases.updateVehicle(body);
   }
 
