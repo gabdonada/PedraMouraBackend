@@ -65,7 +65,7 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
 
         const vehicles = plainToClass(VehicleType,vehicleDB)
     
-        let preventMaint: VehicleType[];
+        let preventMaint: VehicleType[] = [];
 
         for(let veh of vehicles){
             const maintenanceDB = await this.prisma.maintenance.findMany({
@@ -78,12 +78,15 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
                 take: 1
             });
 
-            const maintenance = plainToClass(MaintenanceType,maintenanceDB);
+            if (maintenanceDB && maintenanceDB.length > 0) {
+            
+                const maintenance = plainToClass(MaintenanceType,maintenanceDB);
 
-            const kmDifference = Number(veh.currentKM) - Number(maintenance[0].vehKm);
+                const kmDifference = Number(veh.currentKM) - Number(maintenance[0].vehKm);
 
-            if(kmDifference <= 1000){
-                preventMaint.push(veh);
+                if(kmDifference <= 1000){
+                    preventMaint.push(veh);
+                }
             }
         }
 
@@ -95,7 +98,7 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
 
         const vehicles = plainToClass(VehicleType,vehicleDB)
     
-        let maintenanceTime: VehicleType[];
+        let maintenanceTime: VehicleType[] = [];
 
         for(let veh of vehicles){
             const maintenanceDB = await this.prisma.maintenance.findMany({
@@ -108,12 +111,14 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
                 take: 1
             });
 
-            const maintenance = plainToClass(MaintenanceType,maintenanceDB);
+            if (maintenanceDB && maintenanceDB.length > 0) {
+                const maintenance = plainToClass(MaintenanceType,maintenanceDB);
 
-            const kmDifference = Number(veh.currentKM) - Number(maintenance[0].vehKm);
+                const kmDifference = Number(veh.currentKM) - Number(maintenance[0].vehKm);
 
-            if(kmDifference <= 0){
-                maintenanceTime.push(veh);
+                if(kmDifference <= 0){
+                    maintenanceTime.push(veh);
+                }
             }
         }
 

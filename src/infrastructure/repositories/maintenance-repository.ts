@@ -4,8 +4,11 @@ import { PrismaService } from "../config/prisma.service";
 import { AbstractMaintenance } from "src/domain/repositories/abstract-maintenance";
 import { MaintenanceTotals } from "src/domain/entities/maintenance-totals";
 import { ScheduledMaintenanceType } from "src/domain/entities/scheduledMaintenance-type";
+import { Injectable } from '@nestjs/common';
 
-export class Maintenance implements AbstractMaintenance {
+@Injectable()
+export class MaintenancePersistenceRepository implements AbstractMaintenance {
+
     constructor(
         private prisma: PrismaService,
     ){}
@@ -13,11 +16,11 @@ export class Maintenance implements AbstractMaintenance {
     async getMaintenanceByVehicle(vehicleId: string): Promise<MaintenanceType[]> {
         const maintenance = await this.prisma.maintenance.findMany({
             where:{
-              vehicleId: vehicleId,
+                vehicleId: vehicleId,
             }
-          })
-
-        const maintenanceInfo = plainToClass(MaintenanceType,maintenance)
+        });
+        
+        const maintenanceInfo = plainToClass(MaintenanceType, maintenance)
 
         return maintenanceInfo
     }

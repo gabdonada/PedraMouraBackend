@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserUseCasesModule } from '../user/user-use-cases.module';
 import { AuthUseCases } from './auth.use-case';
-import { UserFactoryService } from '../user/user-factory.service';
+import { jwtConstants } from './constants';
 
 @Module({
-  imports: [UserUseCasesModule],
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+    }),
+    UserUseCasesModule
+  ],
   providers: [
     AuthUseCases
   ],
