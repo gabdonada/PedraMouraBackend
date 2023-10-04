@@ -17,7 +17,6 @@ import { UserUseCases } from './user.use-case';
     UserUseCases,
     UserFactoryService,
     PrismaService,
-    JwtService,
     ConfigService
   ],
   exports: [UserUseCases, UserFactoryService],

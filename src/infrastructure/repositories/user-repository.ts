@@ -31,7 +31,7 @@ export class UserRepository implements IUserRepository {
             }
         }
       );
-  
+
       const { access_token } = accessTokenResponse.data;
       
       const userResponse = await axios.get('https://api.github.com/user', {
@@ -39,23 +39,23 @@ export class UserRepository implements IUserRepository {
           Authorization: `Bearer ${access_token}`
         }
       });
-  
+
       const userInfo = plainToClass(GithubUserResponse,userResponse.data)
 
-      const user = await this.prisma.user.findUnique({
+      let user = await this.prisma.user.findUnique({
         where:{
-          platformId: userInfo.id,
+          platformId: userInfo.id.toString(),
           platformType: 'GIT',
         }
       })
 
       if(!user){
-        await this.prisma.user.create({
+        user = await this.prisma.user.create({
             data:{
-              platformId: userInfo.id,
+              platformId: userInfo.id.toString(),
               platformType: 'GIT',
-              name: userInfo.name,
-              avatarUrl: userInfo.avatarUrl,
+              name: (!userInfo.name ? userInfo.login : userInfo.name) ,
+              avatarUrl: userInfo.avatar_url,
               login: userInfo.login,
             }
           })
@@ -72,7 +72,7 @@ export class UserRepository implements IUserRepository {
           subject: user.id //secret is who owns this token.
       })
 
-      return token
+      return token;
     }
 
     async create(userInfo: User): Promise<User> {
