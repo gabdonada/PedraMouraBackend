@@ -47,6 +47,10 @@ export class VehicleUseCases {
     return await this.repository.updateVehicleKm(body.vehicleId, body.newKm);
   }
 
+  async updateVehicle(body:{vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: string}) {
+    return await this.repository.updateVehicleKm(body.vehicleId, body.newKm, body.plate, body.model, body.vehType, body.year);
+  }
+
   async getPreventiveMaintenance() {
     return await this.repository.getPreventiveMaintenance();
   }

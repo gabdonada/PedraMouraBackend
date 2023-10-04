@@ -30,6 +30,11 @@ export class VehiclesController {
     return await this.usesCases.updateVehicleKm(body);
   }
 
+  @Put('update-vehicle')
+  async updateVehicle(@Body() body:{vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: string}){
+    await this.usesCases.updateVehicle(body);
+  }
+
   @Get('get-preventive-maintenance')
   async getPreventiveMaintenance(){
     return await this.usesCases.getPreventiveMaintenance();
