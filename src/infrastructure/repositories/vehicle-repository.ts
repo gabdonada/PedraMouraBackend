@@ -119,5 +119,20 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
 
         return maintenanceTime;
     }
+
+    async updateVehicle(vehicleId, newKm, plate, model, vehType, year): Promise<void>{
+        await this.prisma.vehicles.update({
+            data:{
+                plate: plate,
+                currentKM: newKm,
+                model: model,
+                year: year,
+                vehType: vehType
+            },
+            where:{
+                id: vehicleId
+            }
+        })
+    }
     
 }
