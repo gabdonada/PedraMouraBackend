@@ -51,6 +51,11 @@ export class MaintenanceController {
     await this.maintenance.getScheduledMaintenance(body.vehicleId,body.date);
   }
 
+  @Get('get-monthly-cost')
+  async getMonthlyCost(){
+    return await this.maintenance.getMonthlyCost();
+  }
+
   @Post('schedule-maintenance')
   async postScheduleMaintenance (@Body() body: ScheduledMaintenanceType){
     await this.maintenance.scheduleMaintenance(body.date, body.mainType, body.vehicleId);

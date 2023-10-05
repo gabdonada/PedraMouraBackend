@@ -43,4 +43,8 @@ export class MaintenanceUseCases {
       return await this.repository.getScheduledMaintenance(vehicleId, currentDate);
   }
 
+  async getMonthlyCost(): Promise<Object> {
+    return await this.repository.getMonthlyCost();
+}
+
 }
