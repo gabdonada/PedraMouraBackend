@@ -8,5 +8,5 @@ export interface IVehicleRepository extends ICrudRepository<VehicleType>{
     getNeedMaintenance(): Promise<VehicleType[]>;
     // Update
     updateVehicleKm(vehicleId: string, newKm: number): Promise<void>;
-    updateVehicleKm(vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: string): Promise<void>;
+    updateVehicle(vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: number): Promise<void>;
 }
