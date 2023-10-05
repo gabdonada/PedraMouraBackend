@@ -13,6 +13,29 @@ export class MaintenancePersistenceRepository implements AbstractMaintenance {
         private prisma: PrismaService,
     ){}
 
+    getMonthlyCost(): Promise<Object[]> {
+        const mock = new Promise<Object[]>((resolve) => {
+          const mockData = [
+            { x: 'Jan', y: 4000 },
+            { x: 'Fev', y: 1500 },
+            { x: 'Mar', y: 2500 },
+            { x: 'Abr', y: 3000 },
+            { x: 'Mai', y: 2000 },
+            { x: 'Jun', y: 10000 },
+            { x: 'Jul', y: 3500 },
+            { x: 'Ago', y: 4500 },
+            { x: 'Set', y: 3500 },
+            { x: 'Out', y: 3500 },
+            { x: 'Nov', y: 3000 },
+            { x: 'Dez', y: 5000 }
+          ];
+      
+          resolve(mockData);
+        });
+        console.log(mock)
+        return mock
+      }
+
     async getMaintenanceByVehicle(vehicleId: string): Promise<MaintenanceType[]> {
         const maintenance = await this.prisma.maintenance.findMany({
             where:{

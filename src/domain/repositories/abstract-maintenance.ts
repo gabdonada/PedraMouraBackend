@@ -10,6 +10,7 @@ export abstract class AbstractMaintenance {
     abstract getMaintenceByPeriod(date: string): Promise<MaintenanceType[]>;
     abstract getScheduledMaintenance(vehicleId: string, currentDate: string): Promise<ScheduledMaintenanceType[]>;
     abstract getAllScheduledMaintenance(currentDate: string): Promise<ScheduledMaintenanceType[]>;
+    abstract getMonthlyCost(): Promise<Object>;
 
     //Post
     abstract registerMaintenance(date: string, mainType: string, vehKm: number, totalAmout: number , vehicleId: string): Promise<void>;
