@@ -25,7 +25,7 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
     }
 
     async getAll(): Promise<VehicleType[]> {
-        const vehicleDB = await this.prisma.vehicles.findMany();
+        const vehicleDB = await this.prisma.vehicles.findMany({where:{isArchived: false}});
 
         const vehicle = plainToClass(VehicleType,vehicleDB);
         
