@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthUseCases } from 'src/uses-cases/auth/auth.use-case';
 
@@ -17,6 +17,11 @@ export class GoogleAutheticationController {
     @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(@Req() req){
         return this.authUseCases.authenticateGoogle(req);
+    }
+
+    @Post('token')
+    googleAuthToken(@Body() body) {
+        return this.authUseCases.authenticateGoogle(body);
     }
   
 }

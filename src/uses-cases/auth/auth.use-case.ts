@@ -29,9 +29,8 @@ export class AuthUseCases {
       name: user.name,
       avatarUrl: user.avatarUrl
     };
-    return {
-      access_token : await this.jwtService.signAsync(payload),
-    }
+    const access_token = await this.jwtService.signAsync(payload);
+    return access_token;
   }
 
 }
