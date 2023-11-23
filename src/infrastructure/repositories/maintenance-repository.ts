@@ -21,7 +21,7 @@ export class MaintenancePersistenceRepository implements AbstractMaintenance {
             { x: 'Mar', y: 2500 },
             { x: 'Abr', y: 3000 },
             { x: 'Mai', y: 2000 },
-            { x: 'Jun', y: 10000 },
+            { x: 'Jun', y: 1000 },
             { x: 'Jul', y: 3500 },
             { x: 'Ago', y: 4500 },
             { x: 'Set', y: 3500 },
