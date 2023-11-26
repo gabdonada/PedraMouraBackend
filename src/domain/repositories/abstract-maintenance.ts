@@ -13,6 +13,8 @@ export abstract class AbstractMaintenance {
     abstract getMonthlyCost(): Promise<Object>;
 
     //Post
-    abstract registerMaintenance(date: string, mainType: string, vehKm: number, totalAmout: number , vehicleId: string): Promise<void>;
+    abstract registerMaintenance(body: MaintenanceType): Promise<Object>;
+    abstract update(body: MaintenanceType): Promise<void>;
+    abstract deleteById(id: string): Promise<Object>;
     abstract scheduleMaintenance(date: string, mainType: string, vehicleId: string): Promise<void>;
 }

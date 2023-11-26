@@ -18,7 +18,7 @@ export class VehicleUseCases {
 
   async create(dto: CreateVehicleDto) : Promise<VehicleType>{
     let entity = this.convertDtoToEntity(dto);
-    const databaseEntity = await this.getByPlate(entity);
+    const databaseEntity = await this.getByPlate(dto.plate);
     if (databaseEntity && databaseEntity.id) {
       throw new BadRequestException("O veiculo já existe no banco de dados.");
     }
@@ -38,8 +38,13 @@ export class VehicleUseCases {
     return obj;
   }
 
-  async getByPlate(@Body() body: VehicleType) : Promise<VehicleType>{
-    const obj = await this.repository.getByPlate(body.plate);
+  async getById(id: string) : Promise<VehicleType>{
+    const obj = await this.repository.getById(id);
+    return obj;
+  }
+
+  async getByPlate(plate: string) : Promise<VehicleType>{
+    const obj = await this.repository.getByPlate(plate);
     return obj;
   }
 

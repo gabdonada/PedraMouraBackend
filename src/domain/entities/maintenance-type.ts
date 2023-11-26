@@ -5,4 +5,5 @@ export class MaintenanceType {
     vehKm: number;
     totalAmout: number;
     vehicleId: string;
+    plate: string;
 }

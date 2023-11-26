@@ -13,6 +13,26 @@ export class MaintenancePersistenceRepository implements AbstractMaintenance {
         private prisma: PrismaService,
     ){}
 
+    async update(body: MaintenanceType): Promise<void> {
+        await this.prisma.maintenance.update({
+            data:{
+                mainType: body.mainType
+            },
+            where:{
+                id: body.id
+            }
+        });
+    }
+
+    async deleteById(id: string): Promise<Object> {
+        const maintenance = await this.prisma.maintenance.delete({
+            where:{
+                id: id
+            }
+        });
+        return maintenance; 
+    }
+
     getMonthlyCost(): Promise<Object[]> {
         const mock = new Promise<Object[]>((resolve) => {
           const mockData = [
@@ -53,19 +73,20 @@ export class MaintenancePersistenceRepository implements AbstractMaintenance {
         
         const maintenanceInfo = plainToClass(MaintenanceType,maintenance)
 
-        return maintenanceInfo
+        return maintenanceInfo;
     }
 
-    async registerMaintenance(date: string, mainType: string, vehKm: number, totalAmout: number, vehicleId: string): Promise<void> {
-        await this.prisma.maintenance.create({
+    async registerMaintenance(body: MaintenanceType): Promise<Object> {
+        const maintenance = await this.prisma.maintenance.create({
             data:{
-                date: date,
-                mainType: mainType,
-                vehKm: vehKm,
-                totalAmout: totalAmout,
-                vehicleId: vehicleId
+                date: body.date,
+                mainType: body.mainType,
+                vehKm: body.vehKm,
+                totalAmout: body.totalAmout,
+                vehicleId: body.vehicleId
             }
         })
+        return maintenance;
     }
 
     async getMaintenceTotals(): Promise<MaintenanceTotals[]> {

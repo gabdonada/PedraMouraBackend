@@ -11,6 +11,15 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
         private prisma: PrismaService
     ){}
 
+    async getById(id: string): Promise<VehicleType> {
+        const vehicle = await this.prisma.vehicles.findUnique({
+            where:{
+                id: id
+            }
+        });
+        return vehicle;
+    }
+
     async getByPlate(plate: string): Promise<VehicleType> {
         const vehicle = await this.prisma.vehicles.findUnique({
             where:{

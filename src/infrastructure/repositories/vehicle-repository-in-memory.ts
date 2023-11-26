@@ -5,6 +5,10 @@ export class VehicleInMemoryRepository implements IVehicleRepository {
     
     constructor(){}
     
+    getById(id: string): Promise<VehicleType> {
+        throw new Error("Method not implemented.");
+    }
+    
     updateVehicle(vehicleId: string, newKm: number, plate: string, model: string, vehType: string, year: number): Promise<void> {
         throw new Error("Method not implemented.");
     }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { MaintenanceType } from "src/domain/entities/maintenance-type";
 import { ScheduledMaintenanceType } from "src/domain/entities/scheduledMaintenance-type";
 import { VehicleType } from "src/domain/entities/vehicle-type.entity";
@@ -20,15 +20,19 @@ export class MaintenanceController {
     return await this.maintenance.getMaintenanceAllVehicle();
   }
 
-  @Post('register-maintenance')
-  async postRegisterMaintenance(@Body() body: MaintenanceType){
-    await this.maintenance.registerMaintenance(
-      body.date,
-      body.mainType,
-      body.vehKm,
-      body.totalAmout,
-      body.vehicleId
-    );
+  @Post('register')
+  async registerMaintenance(@Body() body: MaintenanceType){
+    await this.maintenance.registerMaintenance(body);
+  }
+
+  @Put('update')
+  async update(@Body() body: MaintenanceType){
+    await this.maintenance.update(body);
+  }
+
+  @Get('delete/:id')
+  async deleteById(@Param('id') id: string){
+    return await this.maintenance.deleteById(id);
   }
 
   @Get('get-maintence-totals')
@@ -44,7 +48,7 @@ export class MaintenanceController {
   @Get('get-all-scheduled-maintenances')
   async getAllScheduledMaintenances(@Body() body: string){
     await this.maintenance.getAllScheduledMaintenance(body);
-  }
+  }""
 
   @Get('get-scheduled-maintenances-by-car')
   async getScheduledMaintenances(@Body() body: ScheduledMaintenanceType){

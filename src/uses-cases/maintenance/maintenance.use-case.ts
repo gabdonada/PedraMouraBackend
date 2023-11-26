@@ -1,14 +1,16 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { MaintenanceTotals } from "src/domain/entities/maintenance-totals";
 import { MaintenanceType } from "src/domain/entities/maintenance-type";
 import { ScheduledMaintenanceType } from "src/domain/entities/scheduledMaintenance-type";
 import { AbstractMaintenance } from "src/domain/repositories/abstract-maintenance";
+import { VehicleUseCases } from "../vehicle/vehicle.use-case";
 
 @Injectable()
 export class MaintenanceUseCases {
 
   constructor(
-    private repository: AbstractMaintenance
+    private repository: AbstractMaintenance,
+    private vehicleUsesCases: VehicleUseCases
   ) {}
 
   async getMaintenanceByVehicle(vehicleId: string): Promise<MaintenanceType[]> {
@@ -16,11 +18,36 @@ export class MaintenanceUseCases {
   }
 
   async getMaintenanceAllVehicle(): Promise<MaintenanceType[]> {
-    return await this.repository.getMaintenanceAllVehicle();
+    const maintenanceList = await this.repository.getMaintenanceAllVehicle();
+    if (maintenanceList && maintenanceList.length > 0) {
+      for (const obj of maintenanceList) {
+        const vehicle = await this.vehicleUsesCases.getById(obj.vehicleId);
+        if (vehicle && vehicle.plate) {
+          obj.plate = vehicle.plate;
+        }
+      }
+    }
+    return maintenanceList;
   }
 
-  async registerMaintenance(date: string, mainType: string, vehKm: number, totalAmout: number, vehicleId: string): Promise<void> {
-    return await this.repository.registerMaintenance(date, mainType, vehKm, totalAmout, vehicleId);
+  async registerMaintenance(body: MaintenanceType): Promise<Object> {
+    if (body.plate) {
+      const vehicle = await this.vehicleUsesCases.getByPlate(body.plate);
+      if (vehicle && vehicle.id) {
+        body.vehicleId = vehicle.id;
+      } else {
+        throw new BadRequestException("Placa não encontrada!");
+      }
+    }
+    return await this.repository.registerMaintenance(body);
+  }
+
+  async update(body: MaintenanceType): Promise<void> {
+    return await this.repository.update(body);
+  }
+
+  async deleteById(id: string): Promise<Object> {
+    return await this.repository.deleteById(id);
   }
 
   async getMaintenceTotals(): Promise<MaintenanceTotals[]> {
@@ -45,6 +72,6 @@ export class MaintenanceUseCases {
 
   async getMonthlyCost(): Promise<Object> {
     return await this.repository.getMonthlyCost();
-}
+  }
 
 }
