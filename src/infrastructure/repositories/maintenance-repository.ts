@@ -52,7 +52,6 @@ export class MaintenancePersistenceRepository implements AbstractMaintenance {
       
           resolve(mockData);
         });
-        console.log(mock)
         return mock
       }
 

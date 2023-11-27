@@ -23,7 +23,8 @@ export class VehiclePersistenceRepository implements IVehicleRepository {
     async getByPlate(plate: string): Promise<VehicleType> {
         const vehicle = await this.prisma.vehicles.findUnique({
             where:{
-                plate: plate
+                plate: plate,
+                isArchived: false
             }
         });
         return vehicle;
